@@ -184,6 +184,27 @@ services:
       - root_resource_abstractor
     logging: *default-logging
 
+  # Root Autoscaler
+  root_autoscaler:
+    image: root_autoscaler
+    build: ../autoscaler/
+    container_name: root_autoscaler
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+    hostname: root_autoscaler
+    expose:
+      - "10005"
+    ports:
+      - "10005:10005"
+    environment:
+      - API_PORT=10005
+      - RESOURCE_ABSTRACTOR_URL=root_resource_abstractor
+      - RESOURCE_ABSTRACTOR_PORT=11011
+    depends_on:
+      - root_resource_abstractor
+    logging: *default-logging
+
   root_resource_abstractor:
     image: resource_abstractor
     build: ../resource-abstractor/
